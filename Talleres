@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ariana Carreras — Tarifa para talleres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand: #EFE7D6;
+    --sand-deep: #DFD3B8;
+    --olive: #5B6B45;
+    --olive-deep: #333B26;
+    --clay: #A6673C;
+    --ink: #2B2A20;
+    --ink-soft: #665F4C;
+    --paper-shadow: rgba(51,59,38,0.08);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background: #DCD2B9;
+    color: var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 44px 16px;
+  }
+
+  .sheet{
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--sand);
+    padding: 0 0 52px;
+    box-shadow: 0 20px 50px -20px var(--paper-shadow);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes rise{ to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){
+    .sheet{ animation: none; opacity:1; transform:none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position: relative;
+    padding: 52px 48px 40px;
+    background: linear-gradient(155deg, var(--olive-deep) 0%, var(--olive) 100%);
+    color: var(--sand);
+    overflow: hidden;
+  }
+  @media (max-width:560px){ .hero{ padding: 40px 24px 32px; } }
+
+  .branch{
+    position:absolute;
+    right: -30px;
+    top: -20px;
+    width: 260px;
+    height: auto;
+    opacity: 0.5;
+  }
+  @media (max-width:560px){ .branch{ width: 170px; right:-40px; } }
+
+  .hero-top{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .brand-name{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    margin: 0 0 4px;
+  }
+  .brand-role{
+    font-size: 13px;
+    color: #D9DFC7;
+    margin: 0;
+  }
+  .date{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: #C7CFAF;
+    white-space: nowrap;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1.28;
+    margin: 30px 0 0;
+    max-width: 22ch;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- body ---------- */
+  .body-pad{ padding: 40px 48px 0; }
+  @media (max-width:560px){ .body-pad{ padding: 32px 24px 0; } }
+
+  .intro{
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    margin: 0 0 40px;
+    max-width: 60ch;
+  }
+  .intro strong{ color: var(--ink); font-weight: 600; }
+  [contenteditable="true"]{
+    outline:none;
+    border-bottom: 1px dashed transparent;
+    border-radius: 2px;
+  }
+  [contenteditable="true"]:hover{ border-bottom-color: var(--clay); background: rgba(166,103,60,0.08); }
+  [contenteditable="true"]:focus{ border-bottom-color: var(--clay); background: rgba(166,103,60,0.12); }
+
+  /* ---------- calculator ---------- */
+  .calc{
+    background: #E4DBC3;
+    border: 1px solid var(--sand-deep);
+    padding: 28px 28px 30px;
+    margin-bottom: 44px;
+  }
+  @media (max-width:560px){ .calc{ padding: 22px 18px 26px; } }
+
+  .calc-label{
+    font-size: 12.5px;
+    letter-spacing: 0.01em;
+    color: var(--ink-soft);
+    margin: 0 0 3px;
+  }
+  .calc-title{
+    font-family:'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 22px;
+  }
+
+  .calc-row{
+    display:flex;
+    align-items:center;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .calc-row .n{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 15px;
+    min-width: 84px;
+  }
+
+  input[type=range]{
+    -webkit-appearance:none;
+    flex:1;
+    height: 3px;
+    background: var(--sand-deep);
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    background: var(--clay);
+    cursor:pointer;
+    border: 2px solid var(--sand);
+    box-shadow: 0 0 0 1px var(--clay);
+  }
+  input[type=range]::-moz-range-thumb{
+    width: 17px; height:17px; border-radius:50%;
+    background: var(--clay); cursor:pointer; border: 2px solid var(--sand);
+  }
+
+  .toggle{
+    display:inline-flex;
+    border: 1px solid var(--olive);
+    overflow:hidden;
+  }
+  .toggle button{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border:none;
+    background: transparent;
+    color: var(--olive-deep);
+    padding: 7px 16px;
+    cursor: pointer;
+  }
+  .toggle button.active{
+    background: var(--olive);
+    color: var(--sand);
+  }
+
+  .calc-result{
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--sand-deep);
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .calc-result .r-label{ font-size: 13.5px; color: var(--ink-soft); }
+  .calc-result .r-tier{ font-weight: 600; color: var(--ink); }
+  .calc-result .r-price{ font-family:'IBM Plex Mono', monospace; font-size: 26px; color: var(--clay); }
+
+  /* breakdown table inside calculator */
+  .breakdown{
+    margin-top: 22px;
+    border-top: 1px solid var(--sand-deep);
+    padding-top: 4px;
+  }
+  .b-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 6px;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--sand-deep);
+    transition: background .2s ease;
+  }
+  .b-row:last-child{ border-bottom: none; }
+  .b-row .b-range{ color: var(--ink-soft); min-width: 90px; }
+  .b-row .b-name{ flex:1; font-weight: 500; }
+  .b-row .b-amt{ font-family:'IBM Plex Mono', monospace; color: var(--ink); white-space: nowrap; }
+  .b-row.active{ background: rgba(166,103,60,0.13); }
+  .b-row.active .b-amt{ color: var(--clay); font-weight: 500; }
+
+  /* ---------- tiers ---------- */
+  .section-label{ font-size: 12.5px; color: var(--ink-soft); margin: 0 0 4px; }
+  .section-title{ font-family:'Fraunces', serif; font-size: 19px; font-weight: 600; margin: 0 0 6px; }
+
+  .tiers{ border-top: 1px solid var(--olive-deep); margin-top: 24px; }
+  .tier{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 20px 4px;
+    border-bottom: 1px solid var(--sand-deep);
+    transition: background .2s ease, padding-left .2s ease;
+  }
+  .tier.active{ background: rgba(166,103,60,0.09); padding-left: 14px; }
+  .tier-name{ font-weight: 600; font-size: 15.5px; margin: 0 0 5px; }
+  .tier-desc{ font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; max-width: 38ch; margin: 0; }
+  .tier-price{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 21px;
+    white-space: nowrap;
+    text-align: right;
+    color: var(--clay);
+  }
+  .tier-price small{
+    display:block; font-family:'IBM Plex Sans', sans-serif;
+    font-size: 11px; font-weight: 400; color: var(--ink-soft); margin-top: 3px;
+  }
+
+  .notes{ margin-top: 26px; }
+  .notes ul{ margin:0; padding: 0 0 0 18px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+  .notes li::marker{ color: var(--clay); }
+
+  .closing{ margin-top: 40px; font-size: 15px; line-height: 1.75; color: var(--ink-soft); }
+
+  /* ---------- social ---------- */
+  .social{
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid var(--sand-deep);
+  }
+  .social-grid{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .social-item{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    padding: 9px 14px 9px 10px;
+    border: 1px solid var(--sand-deep);
+    background: #E4DBC3;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .social-item:hover{
+    border-color: var(--clay);
+    background: rgba(166,103,60,0.09);
+  }
+  .social-item svg{ width: 19px; height: 19px; flex-shrink:0; color: var(--olive-deep); }
+  .social-item:hover svg{ color: var(--clay); }
+  .social-item .s-platform{ font-size: 10.5px; text-transform: none; color: var(--ink-soft); margin: 0; line-height:1.3; }
+  .social-item .s-handle{ font-size: 13px; font-weight: 500; margin: 0; line-height:1.3; }
+
+  /* ---------- contact ---------- */
+  .contact-block{
+    margin-top: 44px;
+    padding: 32px 30px;
+    background: var(--olive-deep);
+    color: var(--sand);
+  }
+  @media (max-width:560px){ .contact-block{ padding: 26px 20px; } }
+  .contact-block .section-label{ color: #C7CFAF; }
+  .contact-block .section-title{ color: var(--sand); margin-bottom: 20px; }
+  .c-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(239,231,214,0.18);
+  }
+  .c-row:last-of-type{ border-bottom: none; }
+  .c-label{ font-size: 12.5px; color: #C7CFAF; min-width: 120px; }
+  .c-value{ font-family:'IBM Plex Mono', monospace; font-size: 14.5px; text-align: right; flex:1; }
+  .contact-block [contenteditable="true"]:hover{ border-bottom-color: var(--sand); background: rgba(239,231,214,0.1); }
+  .contact-block [contenteditable="true"]:focus{ border-bottom-color: var(--sand); background: rgba(239,231,214,0.14); }
+
+  .mail-btn{
+    display:inline-block;
+    margin-top: 24px;
+    padding: 12px 24px;
+    background: var(--clay);
+    color: var(--sand);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .mail-btn:hover{ background: #8f5732; }
+
+  footer.sig{
+    margin-top: 44px;
+    padding-top: 22px;
+    border-top: 1px solid var(--sand-deep);
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .sig-name{ font-family:'Fraunces', serif; font-style: italic; font-size: 18px; margin: 0 0 6px; }
+  .sig-role{ font-size: 12.5px; color: var(--ink-soft); margin: 0; }
+
+  .edit-note{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 22px 0 0;
+  }
+  .edit-note span{ border-bottom: 1px dashed var(--clay); padding-bottom: 1px; }
+
+  @media print{
+    body{ padding:0; background:white; }
+    .sheet{ box-shadow:none; max-width:100%; }
+    .calc, .edit-note{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="sheet">
+
+    <div class="hero">
+      <svg class="branch" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 210 C 100 150, 90 120, 60 90 C 40 70, 30 40, 35 10" stroke="#EFE7D6" stroke-width="1.4" opacity="0.8"/>
+        <path d="M100 210 C 100 150, 110 110, 140 80 C 158 62, 165 35, 158 8" stroke="#EFE7D6" stroke-width="1.4" opacity="0.6"/>
+        <ellipse cx="55" cy="55" rx="7" ry="15" transform="rotate(-35 55 55)" fill="#EFE7D6" opacity="0.85"/>
+        <ellipse cx="42" cy="80" rx="6" ry="13" transform="rotate(-50 42 80)" fill="#EFE7D6" opacity="0.7"/>
+        <ellipse cx="72" cy="110" rx="6.5" ry="14" transform="rotate(-20 72 110)" fill="#EFE7D6" opacity="0.75"/>
+        <ellipse cx="130" cy="45" rx="7" ry="15" transform="rotate(40 130 45)" fill="#EFE7D6" opacity="0.85"/>
+        <ellipse cx="148" cy="72" rx="6" ry="13" transform="rotate(55 148 72)" fill="#EFE7D6" opacity="0.7"/>
+        <ellipse cx="122" cy="105" rx="6.5" ry="14" transform="rotate(25 122 105)" fill="#EFE7D6" opacity="0.75"/>
+        <circle cx="98" cy="150" r="3.5" fill="#A6673C" opacity="0.9"/>
+        <circle cx="108" cy="168" r="3" fill="#A6673C" opacity="0.7"/>
+      </svg>
+
+      <div class="hero-top">
+        <div>
+          <p class="brand-name" contenteditable="true">Ariana Carreras</p>
+          <p class="brand-role" contenteditable="true">Facilitadora · Salud Pública y Política Pública</p>
+        </div>
+        <p class="date" contenteditable="true">septiembre 2026</p>
+      </div>
+
+      <h1 contenteditable="true">Tarifa para talleres</h1>
+    </div>
+
+    <div class="body-pad">
+
+      <p class="intro">
+        Ofrezco talleres educativos de <strong>2 horas de duración</strong> que acercan temas de salud pública y política pública —con énfasis en los determinantes sociales de la salud— a comunidades, organizaciones y espacios académicos en Puerto Rico.
+        <span contenteditable="true">Cada sesión combina marco conceptual, datos locales y espacio de discusión aplicado al contexto del grupo.</span>
+      </p>
+
+      <div class="calc">
+        <p class="calc-label">Calculadora</p>
+        <p class="calc-title">Estima tu tarifa</p>
+
+        <div class="calc-row">
+          <span class="n" id="nOut">8 personas</span>
+          <input type="range" id="peopleSlider" min="1" max="40" value="8" step="1">
+        </div>
+
+        <div class="calc-row">
+          <div class="toggle" id="modeToggle">
+            <button data-mode="presencial" class="active">Presencial</button>
+            <button data-mode="virtual">Virtual</button>
+          </div>
+        </div>
+
+        <div class="calc-result">
+          <div>
+            <p class="r-label">Tarifa sugerida</p>
+            <p class="r-tier" id="rTier">Organización comunitaria</p>
+          </div>
+          <p class="r-price" id="rPrice">$450</p>
+        </div>
+
+        <div class="breakdown" id="breakdown">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <p class="section-label">Estructura de precios</p>
+      <p class="section-title">Tarifas por sesión (2 horas)</p>
+
+      <div class="tiers" id="tiersList">
+
+        <div class="tier" data-tier="0">
+          <div>
+            <p class="tier-name" contenteditable="true">Público general</p>
+            <p class="tier-desc" contenteditable="true">1 persona. Consultoría o sesión individual, cupo abierto.</p>
+          </div>
+          <p class="tier-price" contenteditable="true">$35<small>por persona</small></p>
+        </div>
+
+        <div class="tier" data-tier="1">
+          <div>
+            <p class="tier-name" contenteditable="true">Grupo pequeño</p>
+            <p class="tier-desc" contenteditable="true">De 2 a 5 participantes. Ideal para juntas directivas o equipos internos.</p>
+          </div>
+          <p class="tier-price" contenteditable="true">$250<small>tarifa plana</small></p>
+        </div>
+
+        <div class="tier" data-tier="2">
+          <div>
+            <p class="tier-name" contenteditable="true">Organización comunitaria o sin fines de lucro</p>
+            <p class="tier-desc" contenteditable="true">De 6 a 15 participantes. Incluye materiales y hoja de recursos.</p>
+          </div>
+          <p class="tier-price" contenteditable="true">$450<small>tarifa plana</small></p>
+        </div>
+
+        <div class="tier" data-tier="3">
+          <div>
+            <p class="tier-name" contenteditable="true">Agencia gubernamental o institución académica</p>
+            <p class="tier-desc" contenteditable="true">De 16 a 25 participantes. Incluye certificado de participación.</p>
+          </div>
+          <p class="tier-price" contenteditable="true">$650<small>tarifa plana</small></p>
+        </div>
+
+        <div class="tier" data-tier="4">
+          <div>
+            <p class="tier-name" contenteditable="true">Grupo grande</p>
+            <p class="tier-desc" contenteditable="true">De 26 a 40 participantes. Conferencias o adiestramientos a escala institucional.</p>
+          </div>
+          <p class="tier-price" contenteditable="true">$650 + $20<small>por persona sobre 25</small></p>
+        </div>
+
+        <div class="tier" data-tier="5">
+          <div>
+            <p class="tier-name" contenteditable="true">Serie de 3 talleres</p>
+            <p class="tier-desc" contenteditable="true">Mismo grupo, temas conectados en secuencia. Aplica sobre cualquier tarifa institucional.</p>
+          </div>
+          <p class="tier-price" contenteditable="true">15%<small>de descuento</small></p>
+        </div>
+
+      </div>
+
+      <div class="notes">
+        <ul>
+          <li contenteditable="true">Modalidad virtual: $75 menos sobre la tarifa presencial correspondiente.</li>
+          <li contenteditable="true">Viajes fuera del área metro pueden incluir cargo adicional de transportación.</li>
+          <li contenteditable="true">Se solicita un depósito del 50% para confirmar la fecha.</li>
+        </ul>
+      </div>
+
+      <p class="closing" contenteditable="true">
+        Si tu organización trabaja directamente con poblaciones afectadas por inequidades en salud, escríbeme — hay espacio para conversar sobre tarifas ajustadas según presupuesto y alcance del proyecto.
+      </p>
+
+      <div class="social">
+        <p class="section-label">Sígueme</p>
+        <p class="section-title">Redes sociales</p>
+        <div class="social-grid">
+
+          <div class="social-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+            <div><p class="s-platform">Instagram</p><p class="s-handle" contenteditable="true">@Ariana.carreras</p></div>
+          </div>
+
+          <div class="social-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14 8.5h-1.6c-.9 0-1.4.5-1.4 1.4V11h3l-.4 2.6h-2.6V21" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><p class="s-platform">Facebook</p><p class="s-handle" contenteditable="true">Ariana.carreras</p></div>
+          </div>
+
+          <div class="social-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3c.3 2 1.7 3.5 3.7 3.8v3c-1.3 0-2.6-.4-3.7-1.1v6.4a5.3 5.3 0 1 1-5.3-5.3c.3 0 .6 0 .9.1v3.1a2.2 2.2 0 1 0 1.5 2.1V3H15Z"/></svg>
+            <div><p class="s-platform">TikTok</p><p class="s-handle" contenteditable="true">@Ariana.carreras</p></div>
+          </div>
+
+          <div class="social-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8.5" r="1.1" fill="currentColor" stroke="none"/><path d="M7.2 11v6.5" stroke-linecap="round"/><path d="M11 17.5V13c0-1.1.9-2 2-2s2 .9 2 2v4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><p class="s-platform">LinkedIn</p><p class="s-handle" contenteditable="true">Ariana Carreras</p></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="contact-block">
+        <p class="section-label">Contáctame</p>
+        <p class="section-title">Conversemos sobre tu próximo taller</p>
+
+        <div class="c-row">
+          <span class="c-label">Correo electrónico</span>
+          <span class="c-value" contenteditable="true" id="emailField">Carreras.ariana1@gmail.com</span>
+        </div>
+        <div class="c-row">
+          <span class="c-label">Servicio de interés</span>
+          <span class="c-value" contenteditable="true">Público general · Grupo pequeño · Comunitario · Institucional · Grupo grande</span>
+        </div>
+        <div class="c-row">
+          <span class="c-label">Disponibilidad</span>
+          <span class="c-value" contenteditable="true">Presencial y virtual, toda la isla</span>
+        </div>
+        <div class="c-row">
+          <span class="c-label">Tiempo de respuesta</span>
+          <span class="c-value" contenteditable="true">1–2 días laborables</span>
+        </div>
+
+        <a class="mail-btn" id="mailBtn" href="mailto:Carreras.ariana1@gmail.com?subject=Interesado%20en%20un%20taller">Escríbeme →</a>
+      </div>
+
+      <footer class="sig">
+        <div>
+          <p class="sig-name" contenteditable="true">Ariana Carreras</p>
+          <p class="sig-role" contenteditable="true">Disponible para talleres presenciales y virtuales en toda la isla</p>
+        </div>
+      </footer>
+
+      <p class="edit-note">Toca cualquier <span>texto marcado</span> para editarlo. Mueve el control para ver cómo cambia la tarifa según el tamaño del grupo.</p>
+
+    </div>
+  </div>
+
+<script>
+  const slider = document.getElementById('peopleSlider');
+  const nOut = document.getElementById('nOut');
+  const rTier = document.getElementById('rTier');
+  const rPrice = document.getElementById('rPrice');
+  const tiersList = document.getElementById('tiersList');
+  const breakdown = document.getElementById('breakdown');
+  const modeToggle = document.getElementById('modeToggle');
+  let mode = 'presencial';
+
+  const VIRTUAL_DISCOUNT = 75;
+
+  const tiers = [
+    { min:1,  max:1,  index:0, name:'Público general',                 range:'1 persona',        calc:n => 35*n },
+    { min:2,  max:5,  index:1, name:'Grupo pequeño',                   range:'2–5 personas',     calc:()=> 250 },
+    { min:6,  max:15, index:2, name:'Organización comunitaria',        range:'6–15 personas',    calc:()=> 450 },
+    { min:16, max:25, index:3, name:'Agencia / institución académica', range:'16–25 personas',   calc:()=> 650 },
+    { min:26, max:40, index:4, name:'Grupo grande',                    range:'26–40 personas',   calc:n => 650 + (n-25)*20 },
+  ];
+
+  function fmt(v){ return '$' + Math.round(v).toLocaleString('en-US'); }
+
+  function buildBreakdown(n){
+    breakdown.innerHTML = '';
+    tiers.forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'b-row' + (n >= t.min && n <= t.max ? ' active' : '');
+      let amount = t.calc(t.min === 1 ? 1 : t.min);
+      if (mode === 'virtual') amount = Math.max(amount - VIRTUAL_DISCOUNT, 0);
+      const label = t.min === t.max ? fmt(amount) + ' /persona' : fmt(amount) + (t.index === 4 ? ' base' : ' plana');
+      row.innerHTML =
+        '<span class="b-range">' + t.range + '</span>' +
+        '<span class="b-name">' + t.name + '</span>' +
+        '<span class="b-amt">' + label + '</span>';
+      breakdown.appendChild(row);
+    });
+  }
+
+  function update(){
+    const n = parseInt(slider.value, 10);
+    nOut.textContent = n + (n === 1 ? ' persona' : ' personas');
+
+    const tier = tiers.find(t => n >= t.min && n <= t.max);
+    let price = tier.calc(n);
+    if (mode === 'virtual') price = Math.max(price - VIRTUAL_DISCOUNT, 0);
+
+    rTier.textContent = tier.name;
+    rPrice.textContent = fmt(price);
+
+    document.querySelectorAll('.tier').forEach(el => el.classList.remove('active'));
+    const activeEl = tiersList.querySelector('[data-tier="' + tier.index + '"]');
+    if (activeEl) activeEl.classList.add('active');
+
+    buildBreakdown(n);
+  }
+
+  slider.addEventListener('input', update);
+
+  modeToggle.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    mode = btn.dataset.mode;
+    modeToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    update();
+  });
+
+  const emailField = document.getElementById('emailField');
+  const mailBtn = document.getElementById('mailBtn');
+  emailField.addEventListener('input', () => {
+    const val = emailField.textContent.trim();
+    mailBtn.href = 'mailto:' + val + '?subject=Interesado%20en%20un%20taller';
+  });
+
+  update();
+</script>
+
+</body>
+</html>
